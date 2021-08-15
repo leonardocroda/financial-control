@@ -1,5 +1,5 @@
 import { Movements } from 'src/movements/movements.entity';
-import { User } from 'src/user/user.entity';
+import { User } from 'src/users/users.entity';
 import {
   Column,
   Entity,
