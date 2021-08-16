@@ -1,4 +1,4 @@
-import { Categories } from 'src/categories/categories.entity';
+import { Category } from 'src/categories/categories.entity';
 import { Movements } from 'src/movements/movements.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -22,8 +22,8 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(() => Categories, (categories) => categories.user)
-  categories: Categories[];
+  @OneToMany(() => Category, (categories) => categories.user)
+  categories: Category[];
 
   @OneToMany(() => Movements, (movements) => movements.user)
   movements: Movements[];

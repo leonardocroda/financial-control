@@ -6,6 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Financial Control API')
     .setDescription('The Financial Control API Documentation')
     .setVersion('1.0')

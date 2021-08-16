@@ -1,4 +1,4 @@
-import { Categories } from 'src/categories/categories.entity';
+import { Category } from 'src/categories/categories.entity';
 import { User } from 'src/users/users.entity';
 import {
   Column,
@@ -32,9 +32,9 @@ export class Movements {
   @Column({ default: true })
   isActive: boolean;
 
-  @ManyToMany(() => Categories, (categories) => categories.movements)
+  @ManyToMany(() => Category, (categories) => categories.movements)
   @JoinTable()
-  categories: Categories[];
+  categories: Category[];
 
   @ManyToOne(() => User, (user) => user.movements)
   user: User;
