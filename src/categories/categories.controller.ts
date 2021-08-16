@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Category } from './categories.entity';
 import { CategoriesService } from './categories.service';
 import { CategoryDto, CreateCategoryDto } from './dto/categories.dto';
 

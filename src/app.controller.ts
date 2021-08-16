@@ -12,6 +12,7 @@ export class AppController {
     private readonly authService: AuthService,
   ) {}
 
+  @ApiTags('Root')
   @Get()
   getHello(): string {
     return this.appService.getHello();
