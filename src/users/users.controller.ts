@@ -14,18 +14,19 @@ import { User } from './users.entity';
 import { UsersService } from './users.service';
 
 @Controller('users')
-@ApiBearerAuth()
 @ApiTags('User')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find all Users' })
   @Get()
   async getAll(): Promise<User[]> {
     return this.userService.getAll();
   }
 
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Find one User' })
   @Get('/:id')
   async getOne(@Param('id') id: number): Promise<User> {
@@ -39,6 +40,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Update an User' })
+  @ApiBearerAuth()
   @Put('/:id')
   async updateUser(@Body() user: UserDto, @Param('id') id: number) {
     this.userService.update(user, id);
