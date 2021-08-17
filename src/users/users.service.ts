@@ -1,4 +1,11 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { DeepPartial, Repository } from 'typeorm';
@@ -13,11 +20,6 @@ export class UsersService {
     private authService: AuthService,
   ) {}
 
-  async getAll(): Promise<User[]> {
-    const users = await this.repository.find();
-    return users;
-  }
-
   async getByEmail(email: string): Promise<User> {
     return this.repository.findOne({ where: { email } });
   }
@@ -28,8 +30,12 @@ export class UsersService {
     return user;
   }
 
-  async getOne(id: number): Promise<User> {
-    const user = await this.repository.findOne(id);
+  async getOne(id: number, auth: string): Promise<User> {
+    const signedUser = await this.getByToken(auth);
+
+    const user = await this.repository.findOne(id, {
+      where: { id: signedUser.id },
+    });
     return user;
   }
 
@@ -38,7 +44,12 @@ export class UsersService {
     return user;
   }
 
-  async update(entity: DeepPartial<User>, id: number) {
-    await this.repository.update(id, entity);
+  async update(entity: DeepPartial<User>, id: number, auth: string) {
+    const signedUser = await this.getByToken(auth);
+    if (id === signedUser?.id) {
+      return this.repository.update(id, entity);
+    } else {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
   }
 }

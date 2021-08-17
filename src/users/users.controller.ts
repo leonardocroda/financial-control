@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Post,
   Put,
@@ -15,22 +16,18 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 @ApiTags('User')
-@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Find all Users' })
-  @Get()
-  async getAll(): Promise<User[]> {
-    return this.userService.getAll();
-  }
-
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Find one User' })
   @Get('/:id')
-  async getOne(@Param('id') id: number): Promise<User> {
-    return this.userService.getOne(id);
+  async getOne(
+    @Param('id') id: number,
+    @Headers('Authorization') auth: string,
+  ): Promise<User> {
+    return this.userService.getOne(id, auth);
   }
 
   @ApiOperation({ summary: 'Create new User' })
@@ -39,10 +36,15 @@ export class UsersController {
     return this.userService.create(user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update an User' })
   @ApiBearerAuth()
   @Put('/:id')
-  async updateUser(@Body() user: UserDto, @Param('id') id: number) {
-    this.userService.update(user, id);
+  async updateUser(
+    @Body() user: UserDto,
+    @Headers('Authorization') auth: string,
+    @Param('id') id: string,
+  ) {
+    return this.userService.update(user, parseInt(id), auth);
   }
 }
