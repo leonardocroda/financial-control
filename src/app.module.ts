@@ -15,6 +15,9 @@ config();
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
       // host: process.env.DATABASE_HOST,
       // port: parseInt(process.env.DATABASE_PORT),
       // username: process.env.DATABASE_USER,
