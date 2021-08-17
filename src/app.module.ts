@@ -12,20 +12,28 @@ config();
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false,
-      },
-      // host: process.env.DATABASE_HOST,
-      // port: parseInt(process.env.DATABASE_PORT),
-      // username: process.env.DATABASE_USER,
-      // password: process.env.DATABASE_PASSWORD,
-      // database: process.env.DATABASE_NAME,
-      entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(
+      process.env.NODE_ENV === 'production'
+        ? {
+            type: 'postgres',
+            url: process.env.DATABASE_URL,
+            ssl: {
+              rejectUnauthorized: false,
+            },
+            entities: ['dist/**/*.entity{.ts,.js}'],
+            synchronize: true,
+          }
+        : {
+            type: 'postgres',
+            host: process.env.DATABASE_HOST,
+            port: parseInt(process.env.DATABASE_PORT),
+            username: process.env.DATABASE_USER,
+            password: process.env.DATABASE_PASSWORD,
+            database: process.env.DATABASE_NAME,
+            entities: ['dist/**/*.entity{.ts,.js}'],
+            synchronize: true,
+          },
+    ),
     UsersModule,
     CategoriesModule,
     MovementsModule,
